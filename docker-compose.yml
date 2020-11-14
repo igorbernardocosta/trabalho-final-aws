@@ -1,0 +1,38 @@
+version: "3"
+
+services:
+  api-gateway:
+    container_name: API_GATEWAY
+    build: ./api-gateway
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/node-app/gateway
+  
+  api-sales:
+    container_name: API_SALES
+    build: ./api-sales
+    ports:
+      - "3001:3001"
+    volumes:
+      - .:/node-app/sales
+
+  api-products:
+    container_name: API_PRODUCTS
+    build: './api-products'
+    volumes:
+      - ./:/node-app/products
+    depends_on:
+      - db
+    links:
+      - db
+    ports:
+      - '3002:3002'
+
+  db:
+    image: 'mongo'
+    container_name: MONGODB_PRODUCTS
+    ports:
+      - '27017:27017'
+    volumes:
+      - ../:/node-app/mongodb-products
